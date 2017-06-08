@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="linux | python | 爬虫 | 华为网络工程师 | HCNA | HCNP"><title>HCNA 笔记（一）：VRP基础 | Song F</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HCNA 笔记（一）：VRP基础</h1><a id="logo" href="/.">Song F</a><p class="description">Liu's blog</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HCNA 笔记（一）：VRP基础</h1><div class="post-meta">Jun 8, 2017<span> | </span><span class="category"><a href="/categories/HCNA/">HCNA</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><h4 id="什么是VRP"><a href="#什么是VRP" class="headerlink" title="什么是VRP"></a>什么是VRP</h4><p>VRP，全称 Versatile Routing Platform ，是华为公司数据通信产品的通用网络操作系统。简而言之，VRP 就是华为公司开发的用于自家路由器与交换机上的操作系统。</p>
+<p>目前常用的版本为 VRP 5.X</p>
+<h4 id="VRP-视图"><a href="#VRP-视图" class="headerlink" title="VRP 视图"></a>VRP 视图</h4><p>VRP 命令行界面分为若干种视图，最常用的为以下三种：</p>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/VRP%E8%A7%86%E5%9B%BE.png" alt="VRP 视图"></p>
+<ul>
+<li>用户视图：进入命令行界面后，首先便是进入了用户视图。“&lt;  &gt;” 表示的就是命令行视图，“Haiwei” 是缺省的主机名。在此视图下，用户只能了解设备的基础信息，查询设备状态。</li>
+<li>系统视图：在用户视图下使用 <strong>system-view</strong> 可以进入到系统视图。“[  ]”表示系统视图。系统视图下可以使用绝大部分的配置命令。另外，若要进入其他视图，必须先进入系统视图。</li>
+<li>接口视图：在系统视图下使用 <strong>interface ID</strong> ,例如，<strong>interface GE0/0/1</strong>，便可以进入相应的接口视图。在此视图下可以进行相应的接口配置。</li>
+</ul>
+<h4 id="VRP-命令级别与用户权限"><a href="#VRP-命令级别与用户权限" class="headerlink" title="VRP 命令级别与用户权限"></a>VRP 命令级别与用户权限</h4><p>VRP 命令分为四个级别：0级（参观级）、1级（监控级）、2级（配置级）、3级（管理级）。</p>
+<p>用户权限分为0~15共16个级别。默认情况下，3级用户就可以操作VRP系统的所有命令。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">用户级别</th>
+<th>命令级别</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0</td>
+<td>0</td>
+<td>网络诊断类命令（ping，tracert）、登陆命令（telent）等</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td>0、1</td>
+<td>系统维护命令，包括display等。</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td>0、1、2</td>
+<td>业务配置命令，包括路由、各个网络层次的命令</td>
+</tr>
+<tr>
+<td style="text-align:left">3~15</td>
+<td>0、1、2、3</td>
+<td>涉及系统基本运行的命令，还包括故障诊断的 debugging 命令</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>  [^display current-configuration 和 display saved-configuration 属于管理级命令]</p>
+<h4 id="VRP-基本配置"><a href="#VRP-基本配置" class="headerlink" title="VRP 基本配置"></a>VRP 基本配置</h4><h5 id="配置设备名称"><a href="#配置设备名称" class="headerlink" title="配置设备名称"></a>配置设备名称</h5><p>命令行 “&lt;  &gt;” 或 “[  ]” 中显示设备的名称，缺省情况下，设备名称为“Huawei”。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysname <span class="emphasis">*host-name*</span></div></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Huawei] sysname Router1   //将设备名称设置为 Router1</div><div class="line">[Router1]</div></pre></td></tr></table></figure>
+<h5 id="配置设备系统时钟"><a href="#配置设备系统时钟" class="headerlink" title="配置设备系统时钟"></a>配置设备系统时钟</h5><p>华为设备出厂时默认采用了协调世界时 UTC 。设备仅支持24小时制。</p>
+<ul>
+<li>配置时区<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">clock timezone <span class="emphasis">*time-zone-name*</span> add/minus <span class="emphasis">*offset*</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>​      – time-zone-name 用户自定义的时区名<br>​      – add/minus 正向偏移（UTC 时间加上偏移量为当地时间）选择add，反之选择minus<br>​      – offset 偏移时间</p>
+<p>​       例如：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Router1] clock timezone BJ add 08:00  //设置设备时区为北京时区，东八区</div></pre></td></tr></table></figure></p>
+<ul>
+<li>配置时间</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">clock datatime <span class="emphasis">*HH:MM:SS*</span> <span class="emphasis">*YYYY-MM-DD*</span></div></pre></td></tr></table></figure>
+<p>​     例如：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Router1] clock datatime 16:30:00 2017-06-08</div></pre></td></tr></table></figure></p>
+<h5 id="配置设备-IP-地址"><a href="#配置设备-IP-地址" class="headerlink" title="配置设备 IP 地址"></a>配置设备 IP 地址</h5><p>IP 地址是针对设备接口的配置</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ip address <span class="emphasis">*IP_address*</span> &#123;mask|mask-length&#125;</div></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Router1] interface ethernet 1/0/0</div><div class="line">[Router1-Ethernet1/0/0] ip address 10.1.1.100 255.255.255.0</div></pre></td></tr></table></figure>
+<h5 id="用户界面配置"><a href="#用户界面配置" class="headerlink" title="用户界面配置"></a>用户界面配置</h5><ul>
+<li>用户界面及编号</li>
+</ul>
+<p>在与设备进行信息交互时，不同用户有着不同的界面</p>
+<p>Console 用户界面：使用 Console 口登陆的用户。一般，一台设备只有一个Console口</p>
+<p>VTY（Virtual Type Terminal）界面：使用Telent登陆的用户。VTY 类型的用户界面一般有15个（缺省情况下，开启了5个）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>相对编号</th>
+<th>绝对编号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Console 界面</td>
+<td>CON 0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>VTY 界面</td>
+<td>VTY 0 ~ VTY 14</td>
+<td>129 ~ 143</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>用户验证</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>password 验证</td>
+<td>只输入密码，缺省情况下，使用此种验证</td>
+</tr>
+<tr>
+<td>AAA 验证</td>
+<td>输入用户名和密码。安全性高于 password 验证</td>
+</tr>
+<tr>
+<td>None 验证</td>
+<td>直接登陆设备，不需要用户名跟密码，不推荐使用</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>用户权限级别</li>
+</ul>
+<p>在对应的用户视图下设置</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">user privilege level <span class="emphasis">*level*</span>   //权限级别</div></pre></td></tr></table></figure>
+<p>例如：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Router1] user-interfce console 0  //进入Console 用户界面</div><div class="line">[Router1] user privilege level 2</div></pre></td></tr></table></figure></p>
+<h5 id="配置文件管理"><a href="#配置文件管理" class="headerlink" title="配置文件管理"></a>配置文件管理</h5><p>包含设备配置信息的文件称为配置文件，它存在于设备的外部存储器中（注意，不是在内存中），其文件扩展名为 “cfg” 或 “zip” 。</p>
+<ul>
+<li>保存当前配置</li>
+</ul>
+<p>1.手动保存</p>
+ <figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">save[configuration-file]</div></pre></td></tr></table></figure>
+<p>  ​    – configuration-file 指定保存后的配置文件名，若未指定，则默认为 “vrpcfg.zip”</p>
+<p> 2.自动保存</p>
+<p>  缺省情况下，自动保存功能是关闭的。</p>
+<p>  周期性自动保存：<br> <figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Huawei] autosave interval on    //开启周期性自动保存</div><div class="line">[Huawei] autosave interval <span class="emphasis">*time*</span> //设置自动保存周期，单位为分钟，默认为1440分钟（24小时）</div></pre></td></tr></table></figure></p>
+<p>  定时自动保存：<br> <figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Huawei] autosave time on         //开启定时自动保存</div><div class="line">[Huawei] zutosave time <span class="emphasis">*hh:mm:ss*</span>   //设置自动保存时间点</div></pre></td></tr></table></figure></p>
+<ul>
+<li>设置下次启动的配置文件</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startup saved-configuration <span class="emphasis">*configuration-file*</span></div></pre></td></tr></table></figure>
+<h5 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h5><p>系统软件文件的扩展名为 “.cc”，而且必须存放于外部存储器的根目录下。</p>
+<p>华为路由器支持的外部存储器一般有 Flash 和 SD 卡，交换机支持 Flash 和 CF 卡。</p>
+<ul>
+<li>文件操作基本命令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dir</td>
+<td>查看当前路径下文件</td>
+</tr>
+<tr>
+<td>mkdir</td>
+<td>新建目录</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>复制并重命名文件</td>
+</tr>
+<tr>
+<td>cd</td>
+<td>修改当前工作路径</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>传输文件</li>
+</ul>
+<p>TFTP      Trivial File Transfer Protocol      简单文件传输协议</p>
+<p>传输层协议为 UDP ，端口号为 69 ，工作方为 C/S。用 TFTP 传输文件无需进行用户名和密码的验证，也不 会对数据进行加密。<br> 华为路由器和交换机仅支持作为 TFTP 客户端。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tftp <span class="emphasis">*tftp-server*</span> &#123;get|put&#125; <span class="emphasis">*source-filename*</span> [destintion-filename]</div></pre></td></tr></table></figure>
+<p>​         –  tftp-server             服务器 IP 地址<br>​         – get/put     下载文件选择get，上传文件选择put<br>​         –  source-filename       源文件名<br>​         –  destination-filename     目标文件名</p>
+<p>FTP </p>
+<p>基于 VRP 系统的交换机和路由器既可以作服务器，也可以作客户端。同时，   FTP 还支持对服务器进行文件操作。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ftp <span class="emphasis">*host-ip*</span> [port-number]</div></pre></td></tr></table></figure>
+<ul>
+<li>删除文件</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">delete [/unreserved] [/force] <span class="emphasis">*filename*</span></div></pre></td></tr></table></figure>
+<p>​    –  /unreserved      彻底删除，不可恢复<br>​    –  /force      表示无需确定直接删除</p>
+<ul>
+<li>设置系统启动文件</li>
+</ul>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">startup system-software <span class="emphasis">*system-file*</span></div></pre></td></tr></table></figure>
+<p>查看设备当前设置的下次启动时所使用的启动文件情况</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">display startup</div></pre></td></tr></table></figure></div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://www.songf.win/2017/06/08/HCNA-笔记（一）：VRP基础/" data-id="cj3oegw030000zgwfkg0jkike" class="article-share-link">分享</a><div class="tags"><a href="/tags/HCNA-VRP/">HCNA VRP</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://www.songf.win"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HCNA/">HCNA</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/HCNA-VRP/" style="font-size: 15px;">HCNA VRP</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/06/08/HCNA-笔记（一）：VRP基础/">HCNA 笔记（一）：VRP基础</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Song F.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
