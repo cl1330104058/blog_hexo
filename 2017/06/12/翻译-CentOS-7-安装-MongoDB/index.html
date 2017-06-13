@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="linux | python | 爬虫 | 华为网络工程师 | HCNA | HCNP"><title>[翻译] CentOS 7 安装 MongoDB | Song F</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">[翻译] CentOS 7 安装 MongoDB</h1><a id="logo" href="/.">Song F</a><p class="description">Liu's blog</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">[翻译] CentOS 7 安装 MongoDB</h1><div class="post-meta">Jun 12, 2017<span> | </span><span class="category"><a href="/categories/Linux/">Linux</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><p><a href="https://docs.mongodb.com/master/tutorial/install-mongodb-on-red-hat/" target="_blank" rel="external">原网址</a></p>
+<ul>
+<li><h4 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h4></li>
+</ul>
+<p>此教程将引导你在 Red Hat Enterprise Linux 6/7 或 CentOS Linux 6/7 上使用 .rpm 包安装 MongoDB 社区版。虽然，红帽有着自己的 MongoDB ，但还是请使用 MongoDB 官方的软件来确保你使用的是最新版本。</p>
+<blockquote>
+<p>平台支持：<br>此教程仅适用于 64 位系统。请参阅<a href="https://docs.mongodb.com/master/release-notes/3.0-compatibility/#compatibility-platform-support" target="_blank" rel="external">平台支持</a>的详细信息。<br>MongoDB 3.2 已不再支持 Red Hat Enterprise Linux 5</p>
+</blockquote>
+<ul>
+<li><h4 id="安装软件："><a href="#安装软件：" class="headerlink" title="安装软件："></a>安装软件：</h4><p>MongoDB 提供了以下安装包：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">包名</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mongodb-org</td>
+<td style="text-align:center">此安装包会自动安装以下四个包</td>
+</tr>
+<tr>
+<td style="text-align:center">mongodb-org-server</td>
+<td style="text-align:center">包含 mongod 守护程序和关联的配置和 init 脚本</td>
+</tr>
+<tr>
+<td style="text-align:center">mongodb-org-mongos</td>
+<td style="text-align:center">包含 mongos 守护进程</td>
+</tr>
+<tr>
+<td style="text-align:center">mongodb-org-shell</td>
+<td style="text-align:center">包含 mongodb shell</td>
+</tr>
+<tr>
+<td style="text-align:center">mongodb-org-tools</td>
+<td style="text-align:center">包含以下MongoDB工具：mongoimport bsondump，mongodump，mongoexport，mongofiles，mongooplog，mongoperf，mongorestore，mongostat和mongotop。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><h4 id="安装-MongoDB-社区版"><a href="#安装-MongoDB-社区版" class="headerlink" title="安装 MongoDB 社区版"></a>安装 MongoDB 社区版</h4><blockquote>
+<p>要安装不同版本的MongoDB，请参阅该版本的文档。例如，见<a href="https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-red-hat/" target="_blank" rel="external">3.2版</a></p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><h5 id="配置YUM"><a href="#配置YUM" class="headerlink" title="配置YUM"></a>配置YUM</h5><p>创建 <strong>/etc/yum.repos.d/mongodb-org-3.4.repo</strong> 文件，以便可以使用 yum 安装 MongoDB</p>
+<h6 id="安装最新版"><a href="#安装最新版" class="headerlink" title="安装最新版"></a>安装最新版</h6><p>在 repo 文件中写入以下内容：</p>
+<blockquote>
+<p>[mongodb-org-3.4]<br>name=MongoDB Repository<br>baseurl=<a href="https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/" target="_blank" rel="external">https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.4/x86_64/</a><br>gpgcheck=1<br>enabled=1<br>gpgkey=<a href="https://www.mongodb.org/static/pgp/server-3.4.asc" target="_blank" rel="external">https://www.mongodb.org/static/pgp/server-3.4.asc</a></p>
+</blockquote>
+<h6 id="安装早于-3-0-的版本"><a href="#安装早于-3-0-的版本" class="headerlink" title="安装早于 3.0 的版本"></a>安装早于 3.0 的版本</h6><p>要安装早期版本系列（如2.4或2.6），可以在配置中指定版本。例如，要将安装2.6版本系列的软件，请创建一个/etc/yum.repos.d/mongodb-org-2.6.repo文件并保存配置信息：</p>
+<blockquote>
+<p>[mongodb-org-2.6]<br>name=MongoDB 2.6 Repository<br>baseurl=<a href="http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" target="_blank" rel="external">http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/</a><br>gpgcheck=0<br>enabled=1</p>
+</blockquote>
+<p>您可以在<a href="https://repo.mongodb.org/yum/redhat/" target="_blank" rel="external">这找</a>到所有版本的.repo文件。请记住，奇数编号的次要版本（例如2.5）是开发版本，不适合生产使用。</p>
+</li>
+<li><h5 id="安装MongoDB软件包和相关工具。"><a href="#安装MongoDB软件包和相关工具。" class="headerlink" title="安装MongoDB软件包和相关工具。"></a>安装MongoDB软件包和相关工具。</h5><p>使用以下命令安装最新稳定版的软件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y mongodb-org</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li><h4 id="运行-MongoDB"><a href="#运行-MongoDB" class="headerlink" title="运行 MongoDB"></a>运行 MongoDB</h4></li>
+</ul>
+<p>大多数类Unix操作系统限制会话所使用的系统资源。这些限制可能会对 MongoDB 操作产生负面影响。有关详细信息，请参阅<a href="https://docs.mongodb.com/master/reference/ulimit/" target="_blank" rel="external">UNIX ulimit设置</a>。</p>
+<ol>
+<li><h5 id="配置-SELinux"><a href="#配置-SELinux" class="headerlink" title="配置 SELinux"></a>配置 SELinux</h5><blockquote>
+<p>注意：<br>如果你启用了 SELinux，那么必须配置 SELinux，以允许 MongoDB 在基于 Red Hat Linux 的系统（Red Hat Enterprise Linux 或 CentOS Linux）上启动。</p>
+</blockquote>
+<p>如下所示，SELinux 有三种配置方式</p>
+<ul>
+<li><p>如果 SELinux 正处于执行模式，则需要配置使其允许访问 MongoDB 使用的相关端口（例如27017）。有关MongoDB默认端口的更多信息，请参阅<a href="https://docs.mongodb.com/master/reference/default-mongodb-port/" target="_blank" rel="external">默认MongoDB端口</a>。对于默认设置，可以通过运行以下命令来更改：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">semanage port -a -t mongod_port_t -p tcp 27017</div></pre></td></tr></table></figure>
+</li>
+<li><p>在 <strong>/etc/selinux/config</strong> 中将 SELinux 配置为关闭状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELINUX=disabled</div></pre></td></tr></table></figure>
+<p>重启系统，使配置生效。</p>
+</li>
+<li><p>在 <strong>/etc/selinux/config</strong> 中将 SELinux 配置为 permissive 允许模式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELINUX=permissive</div></pre></td></tr></table></figure>
+<p>重启系统，使配置生效。</p>
+<p>你也可以使用 setenforce 将 SELinux 配置为 permissive 模式。使用 setenforce 不需要重启但是只是一次性生效。</p>
+</li>
+</ul>
+</li>
+<li><h5 id="数据存放目录与权限"><a href="#数据存放目录与权限" class="headerlink" title="数据存放目录与权限"></a>数据存放目录与权限</h5><blockquote>
+<p>警告：<br>在 RHEL 7.0 中，如果更改了数据存放路径，而不更改安全上下文的话，则默认的SELinux策略认为 MongoDB 对此目录没有写入权限。</p>
+</blockquote>
+<p>MongoDB 默认将其数据文件存储在 /var/lib/mongo 中并将日志文件存放于 /var/log/mongodb 中。您可以在 /etc/mongod.conf 中指定备用的日志和数据文件目录。有关其他信息，请参阅 <a href="https://docs.mongodb.com/master/reference/configuration-options/#systemLog.path" target="_blank" rel="external">systemLog.path</a> 和 <a href="https://docs.mongodb.com/master/reference/configuration-options/#storage.dbPath" target="_blank" rel="external">storage.dbPath</a>。</p>
+<p>If you change the user that runs the MongoDB process, you must modify the access control rights to the /var/lib/mongo and /var/log/mongodb directories to give this user access to these directories.</p>
+</li>
+</ol>
+<ul>
+<li><h4 id="数据库的启动与关闭"><a href="#数据库的启动与关闭" class="headerlink" title="数据库的启动与关闭"></a>数据库的启动与关闭</h4></li>
+</ul>
+<ol>
+<li><h5 id="启动-MongoDB"><a href="#启动-MongoDB" class="headerlink" title="启动 MongoDB"></a>启动 MongoDB</h5><p>你可以使用以下命令启动 MongoDB</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod start</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="验证-MongoDB-是否已成功启动"><a href="#验证-MongoDB-是否已成功启动" class="headerlink" title="验证 MongoDB 是否已成功启动"></a>验证 MongoDB 是否已成功启动</h5><p>您可以通过检查 /var/log/mongodb/mongod.log 中的日志文件的某行内容来验证 mongod 进程是否成功启动</p>
+<blockquote>
+<p>[initandlisten] waiting for connections on port <port></port></p>
+</blockquote>
+<p>其中 <port> 是 <strong>/etc/mongod.conf</strong> 中配置的端口号，默认情况下为 27017。</port></p>
+<p>你可以通过以下命令设置 MongoDB 随系统自启：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo chkconfig mongod on</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="停止-MongoDB-进程"><a href="#停止-MongoDB-进程" class="headerlink" title="停止 MongoDB 进程"></a>停止 MongoDB 进程</h5><p>你可以使用以下命令停止 MongoDB 服务进程</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod stop</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="重启-MongoDB"><a href="#重启-MongoDB" class="headerlink" title="重启 MongoDB"></a>重启 MongoDB</h5><p>你可以使用以下命令重启 MongoDB</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod restart</div></pre></td></tr></table></figure>
+<p>您可以通过查看 /var/log/mongodb/mongod.log 文件中的输出内容来跟踪进程的状态，以查看产生的错误或重要消息。</p>
+</li>
+<li><h5 id="开始使用-MongoDB"><a href="#开始使用-MongoDB" class="headerlink" title="开始使用 MongoDB"></a>开始使用 MongoDB</h5><p>为了帮助用户使用数据库软件，MongoDB提供了各种驱动程序版本中的<a href="https://docs.mongodb.com/master/#getting-started" target="_blank" rel="external">入门指南</a>。有关可用版本，请参阅<a href="https://docs.mongodb.com/master/#getting-started" target="_blank" rel="external">入门</a>。</p>
+<p>在生产环境中部署MongoDB之前，请考虑<a href="https://docs.mongodb.com/master/administration/production-notes/" target="_blank" rel="external">生产备注</a>文档。 </p>
+<p>之后，要停止MongoDB，请在运行 <a href="https://docs.mongodb.com/master/reference/program/mongod/#bin.mongod" target="_blank" rel="external">mongod</a> 实例的终端中按Control + C。</p>
+</li>
+</ol>
+<ul>
+<li><h4 id="卸载数据库"><a href="#卸载数据库" class="headerlink" title="卸载数据库"></a>卸载数据库</h4></li>
+</ul>
+<p>要想从系统中完全删除MongoDB，你必须删除 MongoDB 应用程序本身，配置文件以及包含数据和日志的任何目录。以下部分将指导你完成必要的卸载步骤。</p>
+<blockquote>
+<p>此过程将完全删除 MongoDB，及其配置和所有数据库。此过程不可逆，因此请确保在继续之前备份所有配置和数据。</p>
+</blockquote>
+<ol>
+<li><h5 id="停止-MongoDB-进程-1"><a href="#停止-MongoDB-进程-1" class="headerlink" title="停止 MongoDB 进程"></a>停止 MongoDB 进程</h5>   <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod stop</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="卸载软件"><a href="#卸载软件" class="headerlink" title="卸载软件"></a>卸载软件</h5><p>删除你以前安装的所有 MongoDB 程序。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum erase $(rpm -qa | grep mongodb-org)</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="删除数据目录"><a href="#删除数据目录" class="headerlink" title="删除数据目录"></a>删除数据目录</h5><p>删除的MongoDB数据库和日志文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo rm -r /var/log/mongodb</div><div class="line">sudo rm -r /var/lib/mongo</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://www.songf.win/2017/06/12/翻译-CentOS-7-安装-MongoDB/" data-id="cj3v0ovum0000xwwfmpaav6bg" class="article-share-link">分享</a><div class="tags"><a href="/tags/Linux/">Linux</a><a href="/tags/翻译/">翻译</a><a href="/tags/MongoDB/">MongoDB</a></div><div class="post-nav"><a href="/2017/06/09/Python-爬虫（一）：抓取代理-IP/" class="next">Python 爬虫（一）：抓取代理 IP</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://www.songf.win"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HCNA/">HCNA</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/翻译/" style="font-size: 15px;">翻译</a> <a href="/tags/MongoDB/" style="font-size: 15px;">MongoDB</a> <a href="/tags/HCNA/" style="font-size: 15px;">HCNA</a> <a href="/tags/VRP/" style="font-size: 15px;">VRP</a> <a href="/tags/爬虫/" style="font-size: 15px;">爬虫</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/06/12/翻译-CentOS-7-安装-MongoDB/">[翻译] CentOS 7 安装 MongoDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/09/Python-爬虫（一）：抓取代理-IP/">Python 爬虫（一）：抓取代理 IP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/08/HCNA-笔记（一）：VRP基础/">HCNA 笔记（一）：VRP基础</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Song F.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
