@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="linux | python | 爬虫 | 华为网络工程师 | HCNA | HCNP"><title>HCNA 笔记（二）：以太网 | Song F</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HCNA 笔记（二）：以太网</h1><a id="logo" href="/.">Song F</a><p class="description">Liu's blog</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HCNA 笔记（二）：以太网</h1><div class="post-meta">Jun 24, 2017<span> | </span><span class="category"><a href="/categories/HCNA/">HCNA</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span></div><div class="post-content"><h4 id="以太网卡"><a href="#以太网卡" class="headerlink" title="以太网卡"></a>以太网卡</h4><p>网络接口卡（Network Interface Card，NIC）通常也简称为“网卡”。网卡工作在数据链路层和物理层，同时具有数据链路层和物理层的功能。</p>
+<ul>
+<li><h5 id="计算机上的网卡"><a href="#计算机上的网卡" class="headerlink" title="计算机上的网卡"></a>计算机上的网卡</h5></li>
+</ul>
+<p>从逻辑上说，网卡包含有7个功能模块：</p>
+<ol>
+<li>CU（Control Unit，控制单元）</li>
+<li>OB（Output Buffer，输出缓存）</li>
+<li>IB（Input Buffer，输入缓存）</li>
+<li>LC（Line Coder，线路编码器）</li>
+<li>LD（Line Decoder，线路解码器）</li>
+<li>TX（Transmitter，发射器）</li>
+<li>RX（Receiver，接收器）</li>
+</ol>
+<p>数据包的发送，接收过程如下：<br><img src="http://or6ijpi19.bkt.clouddn.com/%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93.png?imageView2/2/w/600/h/600/q/75|imageslim" alt="数据发送接收过程"></p>
+<ul>
+<li><h5 id="交换机上的网卡"><a href="#交换机上的网卡" class="headerlink" title="交换机上的网卡"></a>交换机上的网卡</h5></li>
+</ul>
+<p>计算机上的网卡是用来收发数据的，交换机上的网卡是用来转发数据的。<br>交换机上的网卡组成与计算机上的网卡的组成结构是完全一样的，除了 <strong>CU</strong> 外，各个功能模块的工作过程也是一样的。</p>
+<p>计算机的网卡的 CU 需要进行帧的封装和解封，并与计算机上的 TCP/IP 的网络层交换数据；交换机的网卡的 CU 不需要进行帧的封装和解封，而是直接与交换机上其他网卡的 CU 进行帧的交换。</p>
+<h4 id="以太网帧"><a href="#以太网帧" class="headerlink" title="以太网帧"></a>以太网帧</h4><ul>
+<li><h5 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h5></li>
+</ul>
+<p><strong>凡是符合 IEEE 802 标准的网络接口卡都必须拥有一个 MAC 地址。</strong></p>
+<p>每个 MAC 地址长为 48bit ，6个字节。 </p>
+<p>MAC 地址共有3种：</p>
+<ol>
+<li>单播 MAC 地址：第一个字节的最低位是0，标识特定的网卡</li>
+<li>组播 MAC 地址：第一个字节的最低位是1，标识一组网卡</li>
+<li>广播 MAC 地址：每个比特都是1，标识所有的网卡</li>
+</ol>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/MAC%20%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB.png" alt="三种 MAC 地址"></p>
+<p>BIA 地址（Burned-In Address，固化地址，一种<strong>单播地址</strong>）的前三个字节是网卡制造商的 OUI（Organizationally-Unique Identifier），后三个字节是制造商自己确定的每块网卡独一无二的标识。</p>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/BIA%E5%9C%B0%E5%9D%80.png" alt="BIA 地址"></p>
+<ul>
+<li><h5 id="以太帧格式"><a href="#以太帧格式" class="headerlink" title="以太帧格式"></a>以太帧格式</h5></li>
+</ul>
+<p>以太帧的格式有两种标准：一个是由 IEEE 802.3 定义的，称为 IEEE 802.3 格式；一个是由 DEC、Intel、Xerox 三家公司联合定义的，称为 Ethernet II 格式，也称 DIX 格式，是一种使用更加广泛的格式。</p>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/DIX%20%E4%BB%A5%E5%A4%AA%E5%B8%A7.png" alt="DIX 以太帧"></p>
+<p>以下是关于Ethernet II 格式的以太帧的各个字段的描述。</p>
+<ol>
+<li>目的 MAC 地址：有6个字节。可以是单播、组播、广播 MAC 地址。</li>
+<li>源 MAC 地址：有6个字段。只能是单播地址</li>
+<li>类型：有2个字节，表示载荷的类型。<ul>
+<li>0x0800 ：IPv4 数据包</li>
+<li>0x86dd ：IPv6 数据包</li>
+<li>0x0806 ：ARP数据包</li>
+<li>0x8848 ：MPLS 报文</li>
+</ul>
+</li>
+<li>载荷数据：长度可变，46~1500字节。是该帧的有效载荷。</li>
+<li>CRC 字段：有 4 个字节。对帧进行检错校验。</li>
+</ol>
+<p>根据目的 MAC 地址的不同，可以将帧分为3种类型：</p>
+<ul>
+<li>单播以太帧（单播帧）：目的 MAC 地址为一个单播 MAC 地址的帧</li>
+<li>组播以太帧（组播帧）：目的 MAC 地址为一个组播 MAC 地址的帧</li>
+<li>广播以太帧（广播帧）：目的 MAC 地址为一个广播 MAC 地址的帧</li>
+</ul>
+<h4 id="以太网交换机"><a href="#以太网交换机" class="headerlink" title="以太网交换机"></a>以太网交换机</h4><p>交换机转发数据的端口都是以太网口，这样的交换机称为以太网交换机。</p>
+<ul>
+<li><h5 id="3-种转发操作"><a href="#3-种转发操作" class="headerlink" title="3 种转发操作"></a>3 种转发操作</h5></li>
+</ul>
+<p>交换机的基本作用就是用来转发数据帧的。交换机对于传入的帧一共有3种转发操作：</p>
+<ul>
+<li>泛洪（Flooding）：交换机把从某一端口接收到的帧通过其他所有端口转发出去（不包括数据帧进入交换机的端口）</li>
+<li>转发（Forwarding）：交换机把从某一端口接收到的帧通过另一端口转发出去</li>
+<li>丢弃（Discarding）：交换机把从某一端口接收到的帧直接丢弃</li>
+</ul>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/%E4%BA%A4%E6%8D%A2%E6%9C%BA%E4%B8%89%E7%A7%8D%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F.png" alt="三种转发操作"></p>
+<ul>
+<li><h5 id="MAC-地址表"><a href="#MAC-地址表" class="headerlink" title="MAC 地址表"></a>MAC 地址表</h5><p>MAC 地址表的老化时间默认为 300s。</p>
+<p>在计算机中的 MAC 地址表没有老化时间。</p>
+</li>
+<li><h5 id="交换机工作原理"><a href="#交换机工作原理" class="headerlink" title="交换机工作原理"></a>交换机工作原理</h5></li>
+</ul>
+<p>概括如下：</p>
+<ul>
+<li>如果传入交换机的是一个单播帧，交换机会在 MAC 地址表中查找这个 MAC 地址。<ol>
+<li>如果查不到这个地址，执行泛洪操作</li>
+<li>如果查到了这个地址，则比较这个 MAC 地址在地址表中对应的端口编号是不是这个帧进入交换机的那个端口的编号.<br>2.1 如果不是，执行转发操作<br>2.2 如果是，执行丢弃操作</li>
+</ol>
+</li>
+<li>如果传入的是广播帧，交换机不会去查 MAC 地址表，直接执行泛洪操作</li>
+<li>如果传入的是组播帧，略。</li>
+</ul>
+<h4 id="ARP-Address-Resolution-Protocol"><a href="#ARP-Address-Resolution-Protocol" class="headerlink" title="ARP   Address Resolution Protocol"></a>ARP   Address Resolution Protocol</h4><p>ARP 协议的基本作用是根据 IP 地址获得对应的 MAC 地址，是一个网络层协议。</p>
+<ul>
+<li><h5 id="ARP-协议基本原理"><a href="#ARP-协议基本原理" class="headerlink" title="ARP 协议基本原理"></a>ARP 协议基本原理</h5></li>
+</ul>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/ARP%20%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png?imageView2/2/w/1200/h/1200/q/75|imageslim" alt="ARP 工作原理"></p>
+<p>  如上图所示，假设源主机 PC1 已经知道了目的主机 PC2 的 IP 地址为 10.0.0.2，现状需要获取 PC2 的 MAC 地址。过程如下。</p>
+<ol>
+<li>PC1 发送一个<strong>广播帧</strong>，该广播帧的源 MAC 地址为 MAC1，类型字段为 0x0806，表示是一个 ARP （请求）报文。该 ARP 报文的意思是：我的 IP 地址是 10.0.0.1，MAC 地址是 MAC1，请问 IP 地址为 10.0.0.2 所对应的 MAC 地址是多少？</li>
+<li>因为 PC1 发送的是广播帧，所以 PC2 和 PC3 都会接收到它。并交由上层的 ARP 处理模块处理</li>
+<li>PC3 的 ARP 处理模块 会发现请求中的 10.0.0.2 并不是自己的 IP 地址，所以不会应答，而是将报文中的10.0.0.1 与 MAC1 的对应关系存放在自己的 ARP 缓存表中，然后丢弃报文</li>
+<li>PC2 的处理模块发现 10.0.0.2 是自己的 IP 地址，所以会进行应答。PC2 会发送一个<strong>单播帧</strong>到 PC1 ，该帧的目的 MAC 地址为 MAC1 ，源 MAC 地址为 MAC2，类型值还是 0x0806。该帧实际上是一个应答报文，报文中还包含由 PC2 的 IP 地址与 MAC 地址。另外，PC2 也会将请求报文中的 10.0.0.1 与 MAC1 的对应关系存放到自己的 MAC 缓存表中。</li>
+<li>PC1 收到 PC2 发送的单播帧后，会将数据交由上层 ARP 处理模块进行处理。处理模块会提取出 PC2 的 IP 地址与 MAC 地址的对应关系，并存放到自己的 MAC 缓存表中。</li>
+</ol>
+<p>上边提到了 MAC 缓存表的概念，MAC 缓存表是设备用来临时存放 IP 地址与 MAC 地址的对应关系的。当某一设备想要发送<strong>单播帧</strong>时会首先查看自己的 MAC 缓存表中是否存在目的设备的 MAC 地址，若有，则直接发送帧；没有，则要发起 ARP 请求来获得 MAC 地址。</p>
+<p>MAC 缓存表中每个条目的默认生存期时 180s。过了生存期，该条目就会被删除。</p>
+<ul>
+<li><h5 id="ARP-报文格式"><a href="#ARP-报文格式" class="headerlink" title="ARP 报文格式"></a>ARP 报文格式</h5></li>
+</ul>
+<p><img src="http://or6ijpi19.bkt.clouddn.com/ARP%20%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84.png" alt="ARP 报文格式"></p>
+<p>ARP 报文分为<strong>请求报文</strong>和<strong>应答报文</strong>，两者的结构是相同的，只是其中某些字段的取值不同。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件类型</td>
+<td>长度2个字节。表示网络类型，以太网取值为1.</td>
+</tr>
+<tr>
+<td>协议类型</td>
+<td>长度2个字节。表示协议地址类型；取值为 0x0800 即表示根据 IP 地址来进行映射</td>
+</tr>
+<tr>
+<td>硬件地址长度（hln）</td>
+<td>长度1个字节。表示硬件地址的长度，以太网中取值为6，表示 MAC 地址长度为6个字节</td>
+</tr>
+<tr>
+<td>协议地址长度（pln）</td>
+<td>长度1个字节。表示协议地址的长度；取值为4表示 IP 地址的长度为4个字节</td>
+</tr>
+<tr>
+<td>op</td>
+<td>长度2个字节。表示 ARP 报文的类型。取值为1表示 ARP 请求报文；取值为2，表示 ARP 应答报文</td>
+</tr>
+<tr>
+<td>PAD</td>
+<td>一共有18个字节，目的是为了凑足以太网的载荷数据最小为48字节</td>
+</tr>
+</tbody>
+</table>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://www.songf.win/2017/06/24/HCNA-笔记（二）：以太网/" data-id="cj4cmc4r00000vkwfyrl19z8n" class="article-share-link">分享</a><div class="tags"><a href="/tags/HCNA/">HCNA</a><a href="/tags/以太网/">以太网</a></div><div class="post-nav"><a href="/2017/06/17/CentOS-7-安装PhantomJS/" class="next">CentOS 7 安装PhantomJS</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://www.songf.win"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/HCNA/">HCNA</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/HCNA/" style="font-size: 15px;">HCNA</a> <a href="/tags/以太网/" style="font-size: 15px;">以太网</a> <a href="/tags/爬虫/" style="font-size: 15px;">爬虫</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/VRP/" style="font-size: 15px;">VRP</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/PhantomJS/" style="font-size: 15px;">PhantomJS</a> <a href="/tags/翻译/" style="font-size: 15px;">翻译</a> <a href="/tags/MongoDB/" style="font-size: 15px;">MongoDB</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/06/24/HCNA-笔记（二）：以太网/">HCNA 笔记（二）：以太网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/17/CentOS-7-安装PhantomJS/">CentOS 7 安装PhantomJS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/12/翻译-CentOS-7-安装-MongoDB/">[翻译] CentOS 7 安装 MongoDB</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/09/Python-爬虫（一）：抓取代理-IP/">Python 爬虫（一）：抓取代理 IP</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/08/HCNA-笔记（一）：VRP基础/">HCNA 笔记（一）：VRP基础</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2017 <a href="/." rel="nofollow">Song F.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
